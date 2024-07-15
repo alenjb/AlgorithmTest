@@ -44,9 +44,16 @@ public class Main {
 		bw.flush();
 	}
 	static boolean isSosu(int num) {
-		for(int i=2; i<num/2; i++) {
-			if(num % i == 0) return false;
-		}
-		return true;
+		if (num == 1 || num == 2) {
+            return true;
+        } else {
+            for (int i = 2; i <= (int)Math.sqrt(num) + 1; i++) {
+                if (num % i == 0) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
 	}
 }
