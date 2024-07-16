@@ -23,23 +23,25 @@ public class Main {
 			int N = Integer.parseInt(st.nextToken());
 			Applicants [] apps = new Applicants[N];
 			List<Applicants> list = new ArrayList<>();
+			
 			// 1. 입력받기
 			for(int i=0; i<N; i++) {
 				st = new StringTokenizer(br.readLine());
 				apps[i] = new Applicants(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
 			}
+			
 			//2. A 1등 삽입
 			Arrays.sort(apps);
-			
 			int Bmin = Integer.MAX_VALUE;
 			list.add(apps[0]);
-			Bmin = apps[0].b;
+			Bmin = apps[0].a;
 			
+			//3. 
 			for(int i=1; i<N; i++) {
 				// 다음 A 높은 사람
 				Applicants next = apps[i];
-				if(next.b < Bmin) {
-					Bmin = next.b;
+				if(next.a < Bmin) {
+					Bmin = next.a;
 					list.add(next);
 				}
 			}
@@ -56,7 +58,7 @@ public class Main {
 		}
 		// a로 정렬 시
 		public int compareTo(Applicants app) {
-			return this.a - app.a; 
+			return this.b - app.b; 
 		}		
 	}
 }
