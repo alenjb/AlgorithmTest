@@ -16,16 +16,18 @@ public class Main {
         int N = Integer.parseInt(st.nextToken());
         int [] arr = new int[N+1];
         
-        for(int i=0; i<=N; i++) {
+        for(int i=2; i<=N; i++) {
         	arr[i] = i; 
         }
         
-        for(int i=2; i<=N; i++) {
-        	if(i<=N && M<=i && arr[i]!=-1) bw.write(arr[i]+"\n");
-        	for(int j=i; j<=N; j= j+i) {
-        		arr[j] = -1;
+        for(int i=2; i<=Math.sqrt(N); i++) {
+        	if(arr[i] == -1) continue;
+        	for(int j= i+i; j<=N; j=j+i) {
+        		arr[j] = 0;
         	}
-        	
+        }
+        for(int i=M; i<=N; i++) {
+        	if(arr[i]!=0) bw.write(arr[i]+"\n");
         }
         
         bw.flush();
