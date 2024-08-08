@@ -1,10 +1,14 @@
+import java.io.*;
 import java.util.*;
 
 public class Main {
     static int total;
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        total = sc.nextInt(); // 가로 및 세로 줄
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        total = Integer.parseInt(st.nextToken()); // 가로 및 세로 줄
         int totalPerson = total * total;
         List<Integer> [] likes = new List[totalPerson+1]; // 좋아하는 학생 인접 리스트
         int [] seq = new int[totalPerson]; // 자리 지정 순서 배열
@@ -27,15 +31,15 @@ public class Main {
         }
         // 좋아하는 학생 인접 리스트 입력 받기
         for(int t = 0; t<totalPerson; t++){
-            int now = sc.nextInt();
+            st = new StringTokenizer(br.readLine());
+            int now = Integer.parseInt(st.nextToken());
             seq[t] = now;
             for(int a = 0; a<4; a++){
-                likes[now].add(sc.nextInt());
+                likes[now].add(Integer.parseInt(st.nextToken()));
             }
         }
         for(int s = 0; s<totalPerson; s++){ //모든 seq에 있는 사람들에 대해
             int p = seq[s]; //현재 자리를 정하는 사람
-//            System.out.println(p + "차례");
             //1. 교실에서 한칸씩 검사
             for(int i =0; i<total; i++){
                 for(int j=0; j<total; j++){
@@ -58,7 +62,6 @@ public class Main {
                 }
             }
             A poll = pq.poll(); //앉을 사람
-//            System.out.println(p+"자리 : "+ poll.row + " " + poll.col);
             classroom[poll.row][poll.col] = p; //착석
             pq.clear();
         }
@@ -79,14 +82,9 @@ public class Main {
             result += calResult(cnt);
             }
         }
-//        for(int i=0; i<total; i++){
-//            for(int j=0; j<total; j++){
-//                System.out.print(classroom[i][j]+" ");
-//            }
-//            System.out.println();
-//        }
-//        System.out.println("Arrays.toString(classroom) = " + Arrays.toString(classroom));
-        System.out.println(result);
+        bw.write(result+"");
+        bw.flush();
+        bw.flush();
     }
     // 범위 내에 있는지 체크
     static boolean check(int x, int y){
