@@ -2,7 +2,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -26,10 +25,10 @@ public class Main {
         }
 
         int parent = find(1);
-        sb.append(1+" ");
+        sb.append(1).append(" ");
         for(int i=1; i<N+1; i++){
             if(find(i)!= parent){
-                sb.append(i+" ");
+                sb.append(i).append(" ");
                 break;
             }
         }
@@ -45,7 +44,6 @@ public class Main {
 
     static void union(int a, int b){
         int aa = find(a);
-        int bb = find(b);
         arr[aa] = find(b);
     }
 
