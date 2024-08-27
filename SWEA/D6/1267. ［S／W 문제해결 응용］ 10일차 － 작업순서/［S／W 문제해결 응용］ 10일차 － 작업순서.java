@@ -12,6 +12,8 @@ public class Solution {
     static int[] inDegree;
     static int v;
     static StringBuilder sb;
+    static Queue<Integer> q = new ArrayDeque<>();
+
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -48,8 +50,7 @@ public class Solution {
     }
 
     private static void topSort() {
-        Queue<Integer> q = new ArrayDeque<>();
-        
+
         // 진입 차수가 0인 노드를 큐에 삽입
         for (int i = 1; i <= v; i++) {
             if (inDegree[i] == 0) {
@@ -61,10 +62,10 @@ public class Solution {
         while (!q.isEmpty()) {
             int now = q.poll();
             sb.append(now).append(" ");
-            
+
             for (int num : next[now]) {
                 inDegree[num]--;
-                
+
                 // 진입 차수가 0이 되면 큐에 삽입
                 if (inDegree[num] == 0) {
                     q.add(num);
@@ -72,5 +73,6 @@ public class Solution {
             }
         }
         sb.append("\n");
+        q.clear();
     }
 }
