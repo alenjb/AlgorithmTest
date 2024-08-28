@@ -54,8 +54,10 @@ public class Main {
 	}
 	
 	static void union(int a, int b) {
-		if(find(a) == find(b)) return;
-		parent[find(a)] = find(b);
+		int aa = find(a);
+		int bb = find(b);
+		if(aa == bb) return;
+		parent[aa] = find(bb);
 	}
 	
 	static int find(int num) {
