@@ -5,7 +5,7 @@ import java.io.OutputStreamWriter;
 import java.util.StringTokenizer;
 
 public class Solution {
-    static int [] parent;
+    static int [] parent, rank;
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -21,6 +21,7 @@ public class Solution {
             int m = Integer.parseInt(st.nextToken());
 
             parent = new int[n+1];
+            rank = new int[n+1];
             for(int i=1; i<=n; i++) parent[i] = i;
 
             for(int i=0; i<m; i++){
@@ -36,15 +37,23 @@ public class Solution {
             }
             sb.append("\n");
         }
-        bw.write(sb.toString());
-        bw.flush();
-        bw.close();
+        System.out.print(sb);
+//        bw.write(sb.toString());
+//        bw.flush();
+//        bw.close();
     }
     static void union(int a, int b){
         int aa = find(a);
         int bb = find(b);
         if(aa == bb) return;
-        parent[aa] = bb;
+        //더 큰게 대표노드
+        if(rank[aa] > rank[bb]) {
+            parent[bb] = aa;
+        }
+        else {
+            parent[aa] = bb;
+            if(rank[aa] == rank[bb]) rank[bb]++;
+        }
     }
     static int find(int num){
         if(num == parent[num]) return num;
