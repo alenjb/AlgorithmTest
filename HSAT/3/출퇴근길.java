@@ -12,8 +12,8 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        n = Integer.parseInt(st.nextToken()); // Number of vertices
-        m = Integer.parseInt(st.nextToken()); // Number of edges
+        n = Integer.parseInt(st.nextToken()); 
+        m = Integer.parseInt(st.nextToken()); 
         arr = new ArrayList[n + 1];
         rArr = new ArrayList[n + 1];
         for (int i = 0; i <= n; i++) {
@@ -52,12 +52,12 @@ public class Main {
         }
 
         System.out.println(cnt - 2);
-    } // main
+    }
 
-    static void dfs(int now, List<Integer>[] adj, boolean[] visit) {
+    static void dfs(int now, List<Integer>[] list, boolean[] visit) {
         if (visit[now]) return;
         visit[now] = true;
-        for (int x : adj[now])
-            dfs(x, adj, visit);
+        for (int x : list[now])
+            dfs(x, list, visit);
     }
 }
