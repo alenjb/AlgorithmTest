@@ -1,3 +1,5 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.*;
 
 public class Main {
@@ -5,19 +7,23 @@ public class Main {
     static List<Fireball>[][] arr;
     static Set<List<Integer>> visited;
     static Queue<Fireball> q;
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        N = sc.nextInt();
-        M = sc.nextInt();
-        K = sc.nextInt();
+    public static void main(String[] args) throws Exception{
+        BufferedReader br =new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
+
+        st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+        K = Integer.parseInt(st.nextToken());
 
         q = new ArrayDeque<>();
         for(int i=0; i<M; i++){
-            int r = sc.nextInt();
-            int c = sc.nextInt();
-            int mass = sc.nextInt();
-            int speed = sc.nextInt();
-            int direction = sc.nextInt();
+            st = new StringTokenizer(br.readLine());
+            int r = Integer.parseInt(st.nextToken());
+            int c = Integer.parseInt(st.nextToken());
+            int mass = Integer.parseInt(st.nextToken());
+            int speed = Integer.parseInt(st.nextToken());
+            int direction = Integer.parseInt(st.nextToken());
             q.add(new Fireball(r, c, mass, speed, direction));
         }
         for(int i=0; i<K; i++) {
@@ -124,11 +130,6 @@ public class Main {
             this.mass = mass;
             this.speed = speed;
             this.direction = direction;
-        }
-
-        @Override
-        public String toString() {
-            return "r: "+r +" c: "+c+" mass : "+mass + " speed: "+speed + " direction: "+ direction;
         }
     }
 }
