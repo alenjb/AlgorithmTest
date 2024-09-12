@@ -16,29 +16,29 @@ public class Main {
         int result = 0;
 
         for (int i = 0; i < N; i++) {
-            int count = 0;
-            
+            int cnt = 0;
+
             // 왼쪽 방향 계산
-            double maxLeftSlope = Double.POSITIVE_INFINITY;
+            double ls = Double.POSITIVE_INFINITY;
             for (int j = i - 1; j >= 0; j--) {
-                double slope = (double)(arr[i] - arr[j]) / (i - j);
-                if (slope < maxLeftSlope) {
-                    maxLeftSlope = slope;
-                    count++;
+                double now = (double)(arr[i] - arr[j]) / (i - j);
+                if (now < ls) {
+                    ls = now;
+                    cnt++;
                 }
             }
 
             // 오른쪽 방향 계산
-            double maxRightSlope = Double.NEGATIVE_INFINITY;
+            double rs = Double.NEGATIVE_INFINITY;
             for (int j = i + 1; j < N; j++) {
-                double slope = (double)(arr[j] - arr[i]) / (j - i);
-                if (slope > maxRightSlope) {
-                    maxRightSlope = slope;
-                    count++;
+                double now = (double)(arr[j] - arr[i]) / (j - i);
+                if (now > rs) {
+                    rs = now;
+                    cnt++;
                 }
             }
 
-            result = Math.max(result, count);
+            result = Math.max(result, cnt);
         }
 
         System.out.println(result);
