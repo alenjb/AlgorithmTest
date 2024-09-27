@@ -1,0 +1,4 @@
+select distinct ID, EMAIL, FIRST_NAME, LAST_NAME
+from SKILLCODES JOIN DEVELOPERS ON CODE & SKILL_CODE = CODE 
+where CATEGORY = 'Front End'
+order by ID
