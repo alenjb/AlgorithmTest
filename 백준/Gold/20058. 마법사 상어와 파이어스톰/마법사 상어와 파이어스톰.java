@@ -1,12 +1,11 @@
-import javax.management.MXBean;
-import java.beans.Visibility;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.*;
 
 public class Main {
     static int N, Q, L;
     static int [][] arr;
     static int [][] arr2;
-    static int [] rotate;
     static int [] dr = {0, -1, 1, 0};
     static int [] dc = {-1, 0, 0, 1};
     static boolean[][] visited;
@@ -16,42 +15,38 @@ public class Main {
     static int maxVal = -1;
     static long total = 0;
     static int cnt;
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        N = sc.nextInt(); // 격자의 크기를 결정 2^n
-        Q = sc.nextInt(); // 파이어스톰 시행 횟수
+    public static void main(String[] args) throws Exception{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
+        StringBuilder sb = new StringBuilder();
+        st = new StringTokenizer(br.readLine());
+
+        N = Integer.parseInt(st.nextToken()); // 격자의 크기를 결정 2^n
+        Q = Integer.parseInt(st.nextToken()); // 파이어스톰 시행 횟수
         L = (int)Math.pow(2, N); // 총 길이
         arr = new int[L][L];
         arr2 = new int[L][L];
-        rotate = new int[Q];
+
 
         for(int i=0; i<L; i++){
+            st = new StringTokenizer(br.readLine());
             for(int j=0; j<L; j++){
-                arr[i][j] = sc.nextInt();
+                arr[i][j] = Integer.parseInt(st.nextToken());
             }
         }
 
 
-
+        st = new StringTokenizer(br.readLine());
         for(int i=0; i<Q; i++) {
-            int nowTurn = sc.nextInt();
+            int nowTurn = Integer.parseInt(st.nextToken());
             maxVal = 0;
             total = 0;
             visited = new boolean[L][L];
             turn(nowTurn);
         }
 
-        System.out.println(total);
-        System.out.println(maxVal);
-//        System.out.println("total = " + total);
-//        System.out.println("maxVal = " + maxVal);
-
-//        for(int i=0; i<L; i++){
-//            for(int j=0; j<L; j++){
-//                System.out.print(arr[i][j]+" ");
-//            }
-//            System.out.println();
-//        }
+        sb.append(total).append("\n").append(maxVal);
+        System.out.print(sb);
 
     }
 
@@ -69,8 +64,8 @@ public class Main {
             for(int j=tmpL-1; j<L; j+=tmpL){
                 print(tmpL, list, i, j);
             }
-        }
 
+        }
         copyArr();
         minus();
         BFS();
@@ -109,7 +104,6 @@ public class Main {
                         if(newRR>=0 && newRR<L && newCC>=0 && newCC<L && arr[newRR][newCC]>0 && !visited[newRR][newCC]) {
                             visited[newRR][newCC] = true;
                             q.add(new int[]{newRR, newCC});
-//                            tmpCnt++;
                         }
                     }
                 }
