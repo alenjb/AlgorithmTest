@@ -29,12 +29,12 @@ public class Main {
     }
 
     static long bs(long start, long end) {
-        while (start + 1 < end) {
+        while (start <= end) {
             long mid = (start + end) / 2;
-            if(check(mid)) end = mid;
-            else start = mid;
+            if(check(mid)) end = mid-1;
+            else start = mid+1;
         }
-        return end;
+        return start;
     }
 
     static boolean check(long num) {
