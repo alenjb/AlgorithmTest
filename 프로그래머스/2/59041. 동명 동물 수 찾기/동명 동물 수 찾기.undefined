@@ -1,9 +1,22 @@
--- 코드를 입력하세요
-SELECT A.NAME, A.COUNT AS COUNT
-FROM(
-    SELECT NAME AS NAME, COUNT(*) COUNT
-    FROM ANIMAL_INS
-    GROUP BY NAME
-) A
-WHERE A.COUNT >=2 AND A.NAME IS NOT NULL
-ORDER BY A.NAME
+select a.NAME, a.COUNT
+from (select name, count(*) as count
+     from ANIMAL_INS
+     group by name) a
+where a.count >=2 and a.name is not null
+order by a.NAME
+
+
+
+
+
+
+
+# -- 코드를 입력하세요
+# SELECT A.NAME, A.COUNT AS COUNT
+# FROM(
+#     SELECT NAME AS NAME, COUNT(*) COUNT
+#     FROM ANIMAL_INS
+#     GROUP BY NAME
+# ) A
+# WHERE A.COUNT >=2 AND A.NAME IS NOT NULL
+# ORDER BY A.NAME
