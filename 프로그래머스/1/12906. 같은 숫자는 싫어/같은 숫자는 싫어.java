@@ -2,16 +2,20 @@ import java.util.*;
 
 public class Solution {
     public int[] solution(int []arr) {
-        List<Integer> l = new ArrayList<>();
-        for(int i=0; i< arr.length; i++){
-            if(i!= arr.length-1 && arr[i] == arr[i+1]) continue;
-            int a = arr[i];
-            l.add(a);
+        Stack<Integer> stack = new Stack<>();
+        stack.push(arr[0]);
+        
+        for(int i=1; i<arr.length; i++){
+            int top = stack.peek();
+            if(top != arr[i]){ //다르면 넣기
+                stack.push(arr[i]);
+            }
         }
-        int size = l.size();
-        int[] answer = new int [size];
-        for(int i=0; i<l.size(); i++){
-            answer[i] = l.get(i);
+        int size = stack.size();
+        int [] answer = new int [size];
+        int n = size-1;
+        for(int i=0; i<size; i++){      
+            answer[n-i] = stack.pop();
         }
         return answer;
     }
