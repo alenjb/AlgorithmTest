@@ -2,38 +2,31 @@ import java.util.*;
 
 class Solution {
     public int[] solution(int[] progresses, int[] speeds) {
-        List<Integer> list = new ArrayList<>();
-        int len = progresses.length;
-        int [] remain = new int [len];
-        for(int i=0; i<len; i++){
-            remain[i] = 100 - progresses[i];
+        Queue<Integer> queue = new LinkedList<>();
+        
+        // 각 작업별로 100% 달성까지 남은 일수를 계산하여 큐에 저장
+        for (int i = 0; i < progresses.length; i++) {
+            int remaining = 100 - progresses[i];
+            int days = (remaining % speeds[i] == 0) ? remaining / speeds[i] : (remaining / speeds[i]) + 1;
+            queue.offer(days);
         }
         
-    int idx = 0;
-    while(idx <len){
-        int cnt = 0;
-        int time = remain[idx] / speeds[idx];
-        if(remain[idx] % speeds[idx] != 0) time++;
-        for(int i=idx; i<len; i++){
-            remain[i] -= (speeds[i] * time);
-}
-        for(int i = idx; i<len; i++){
-
-            if(remain[i] <=0) {
-                cnt++;
-            }else break;
+        List<Integer> result = new ArrayList<>();
+        
+        while (!queue.isEmpty()) {
+            int count = 1;
+            int first = queue.poll(); // 첫 번째 작업의 완료 예상 일수
+            
+            // 첫 번째 작업과 같은 날 배포할 수 있는 작업 개수 계산
+            while (!queue.isEmpty() && queue.peek() <= first) {
+                queue.poll();
+                count++;
+            }
+            
+            result.add(count);
         }
         
-        idx+= cnt;
-        list.add(cnt);        
-    }
-        int [] answer = new int [list.size()];
-        int lenIdx = 0;
-        for(int num : list){
-            answer[lenIdx] = num;
-            lenIdx++;
-        }
-
-        return answer;
+        // 리스트를 배열로 변환
+        return result.stream().mapToInt(i -> i).toArray();
     }
 }
