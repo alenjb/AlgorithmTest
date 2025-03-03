@@ -1,59 +1,63 @@
 import java.util.*;
 
 class Solution {
-    static int [] arr;
-    static int [] answer;
+    static HashMap<String, Integer> map = new HashMap<>();
+    static List<Integer> [] arr;
+    static int [] result;
+    
     public int[] solution(String[] enroll, String[] referral, String[] seller, int[] amount) {
-        int length = enroll.length;
-        Map<String, Integer> map = new HashMap<>();
-        arr = new int [length];
-        answer = new int [length]; //돈 배열        
-        map.put("센터", 0);
-        for(int i=0; i<length; i++){
-            String name = enroll[i];
-            map.put(name, i);
-        }
+        // HashMap<Integer, String> map2 = new HashMap<>();
+        int n = enroll.length;
+        arr = new ArrayList[n];
+        for(int i=0; i<n; i++) arr[i] = new ArrayList<>();
+        result = new int [n];
         
-        for(int i=0; i<length; i++){
-            String from = referral[i];
-            String to = enroll[i];
-            if (from.equals("-")) {
-                arr[map.get(to)] = -1;  // 부모 없음 표시
-            } else {
-                arr[map.get(to)] = map.get(from);
-            }
-        }
+        //맵 만들기
+        for(int i=0; i<n; i++) map.put(enroll[i], i);
+        // for(int i=0; i<n; i++) map2.put(i, enroll[i]);
         
-        
-        int sl = seller.length;
-        for(int i=0; i<sl; i++){
-            String nowSeller = seller[i];
+        // 연결 리스트 구성(refferal 돌면서)
+        for(int i=0; i<n; i++){
             
-            int nowSellerIdx = map.get(nowSeller);
-            int money = amount[i] * 100;
-            int to = arr[nowSellerIdx];
-            
-            while(to != -1){
-                int giveMoney = money / 10;
-                int tmpMoney = money - giveMoney;
-                // break;
-                if(giveMoney < 1){ // 줄 돈이 1원 미만
-                    answer[nowSellerIdx] += money;
-                    break;
-                }else{ //10프로 뺏김
-                    answer[nowSellerIdx] += tmpMoney;
-                    money = giveMoney;
-                    nowSellerIdx = to;
-                    to = arr[nowSellerIdx];
-                }
-            }
-            if(to ==-1){
-                //arr[to] == "-" 인 상태
-                int giveMoney = money / 10;
-                int tmpMoney = money - giveMoney;
-                answer[nowSellerIdx] += tmpMoney;                
-            }
+            int invited = map.get(enroll[i]); // 초대받은 사람 번호
+            if(referral[invited].equals("-")) continue; //초대한 사람이 없으면 넘어가기
+            int invite = map.get(referral[invited]); // 초대한 사람 번호
+            arr[invited].add(invite); //연결
         }
-        return answer;
+        
+        // 셀러들 돌면서 amout 계산
+        int sn = seller.length;
+        
+        for(int i=0; i<sn; i++){
+            // 판매한 사람 번호
+            int sellNum = map.get(seller[i]);
+            // 판매액
+            int sellAmount = 100 * amount[i];
+            
+            cal(sellNum, sellAmount, enroll, referral, seller, amount);         
+        }
+        
+        return result;
     }
+    void cal(int sellNum, int nowAmount, String[] enroll, String[] referral, String[] seller, int[] amount){
+        if(nowAmount == 0) return;
+            
+
+                // 초대한 사람이 먹을 이익금
+        int inviteAmount = nowAmount / 10;
+        result[sellNum] += (nowAmount - inviteAmount);
+        
+        if(referral[sellNum].equals("-") || inviteAmount == 0){ // 판매한 사람이 최상단이면
+            return;                
+        }
+
+        // 초대한 사람이 있는 경우        
+        
+        // 초대한 사람 번호
+        int inviteNum = map.get(referral[sellNum]);
+
+        cal(inviteNum, inviteAmount, enroll, referral, seller, amount);
+
+    }
+    
 }
