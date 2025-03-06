@@ -1,3 +1,5 @@
-select count(distinct name) as count
-from ANIMAL_INS
-where NAME is not null
+-- 코드를 입력하세요
+SELECT COUNT(DISTINCT NAME) AS 'count'
+
+FROM ANIMAL_INS
+WHERE NAME IS NOT NULL
