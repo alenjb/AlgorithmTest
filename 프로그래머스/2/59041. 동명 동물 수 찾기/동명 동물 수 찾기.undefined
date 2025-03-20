@@ -1,9 +1,9 @@
-select a.NAME, a.COUNT
+select A.NAME, A.COUNT
 from (select name, count(*) as count
      from ANIMAL_INS
-     group by name) a
-where a.count >=2 and a.name is not null
-order by a.NAME
+     group by name) A
+where A.count >=2 and A.name is not null
+order by A.NAME
 
 
 
