@@ -1,15 +1,9 @@
 import java.util.*;
 class Solution {
     public boolean solution(String[] pb) {
-        HashMap<String, Integer> map = new HashMap<>();
+        Arrays.sort(pb);
         for(int i=0; i<pb.length-1; i++){
-            map.put(pb[i], i);
-        }
-        
-        for(int i=0; i<pb.length; i++){
-            for(int j=0; j<pb[i].length(); j++){
-                if(map.containsKey(pb[i].substring(0,j))) return false;
-            }
+            if(pb[i+1].startsWith(pb[i])) return false;
         }
         return true;
     }
