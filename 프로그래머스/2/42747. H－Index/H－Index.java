@@ -2,25 +2,28 @@ import java.util.*;
 
 class Solution {
     public int solution(int[] citations) {
-        Arrays.sort(citations);
-        int answer = bs(0, citations.length+1, citations);
+        int left = 0;
+        int right = citations.length;
+        int answer = 0;
+
+        while (left <= right) {
+            int mid = (left + right) / 2;
+            if (isValid(mid, citations)) {
+                answer = mid;     // 조건 만족: 더 큰 h 가능성 확인
+                left = mid + 1;
+            } else {
+                right = mid - 1;  // 조건 불만족: h를 줄여야 함
+            }
+        }
+
         return answer;
     }
-    // start check end uncehcked 0, citations.length+1
-    static int bs(int start, int end, int[] citations){
-        while(start +1 < end){
-            int mid = (start + end) /2;
-            if(check(mid, citations)) start = mid;
-            else end = mid;
+
+    private boolean isValid(int h, int[] citations) {
+        int count = 0;
+        for (int c : citations) {
+            if (c >= h) count++;
         }
-        return start;
-    }
-    static boolean check(int num, int[] citations){
-        int cnt = 0;
-        for(int i=0; i<citations.length; i++){
-            if(citations[i] >= num) cnt++;
-            if(cnt >= num) return true;
-        }
-        return false;
+        return count >= h;
     }
 }
