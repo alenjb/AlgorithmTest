@@ -1,33 +1,33 @@
 import java.util.*;
 class Solution {
     static boolean [] visited;
-    static int[][] computers;
-    public int solution(int n, int[][] c) {
-        visited  = new boolean [n];
-        computers = c;
+    static List<Integer> [] arr;
+    public int solution(int n, int[][] com) {
+        arr = new List[n+1];
+        visited = new boolean[n+1];
+        for(int i=0; i<n; i++) arr[i] = new ArrayList<Integer>();
         
-        int cnt = 0;
-        for(int i=0; i<computers.length; i++){
-            if(!visited[i]){
-                BFS(i);
-                cnt++;
-            }
-        }
-        return cnt;
-    }
-
-    static void BFS(int num){
-        Queue<Integer> q = new LinkedList<>();
-        q.add(num);
-        visited[num] = true;
-        while(!q.isEmpty()){
-            int now = q.poll();
-            for(int i=0; i<computers[now].length; i++){
-                if(computers[now][i] == 1 && !visited[i]){
-                    visited[i] = true;
-                    q.add(i);
+        for(int i=0; i<n; i++){
+            for(int j=0; j<n; j++){
+                if(i!=j && com[i][j] == 1){
+                    arr[i].add(j);
                 }
             }
+        }
+        
+        int answer = 0;
+        for(int i=0; i<n; i++){
+            if(!visited[i]) {
+                DFS(i);
+                answer++;
+            }
+        }
+        return answer;
+    }
+    public void DFS(int num){
+        visited[num] = true;
+        for(int con : arr[num]){
+            if(!visited[con]) DFS(con);
         }
     }
 }
