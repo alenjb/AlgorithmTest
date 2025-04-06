@@ -1,28 +1,28 @@
 import java.util.*;
-
 class Solution {
     public long solution(int n, int[] times) {
-        // 0 ~ 7 * n 이분탐색
-        long min = Long.MAX_VALUE;
-        for(long t : times) min = Math.min(min, t);
-        long answer = bs(0, n * min, n, times);
-     
-        return answer;
-    }
-    // start는 uncheck, end는 check
-    static long bs(long start, long end, int n, int[] times){
-        while(start + 1 < end ){
-            long mid = (start + end) / 2;
-            if(check(n, mid, times)) end = mid;
-            else start = mid;
+        long max = Integer.MIN_VALUE;
+        for(int i=0; i<times.length; i++){
+            max = Math.max(times[i], max);
         }
-        return end;
+        return search(n, times, max * n);
     }
-    static boolean check(long n, long num, int[] times){
-        long cnt = 0;
-        for(long time : times){
-            cnt += num / time; // 심사 가능한 사람 수
+    
+    public long search(int n, int[] times, long max){
+        long right = max;// 정답 범위 포함
+        long left = 0;
+        while(left +1 < right){
+            long mid = (right + left) / 2;
+            if(isValid(mid, times, n)) right = mid;
+            else left = mid;
         }
-        return n <= cnt;        
+        return right;
+    }
+    public boolean isValid(long num, int[] times, int n){
+        long valid = 0; // 처리 가능 사람 수
+        for(int time : times){
+            valid += (num / time);
+        }
+        return valid >= n;
     }
 }
