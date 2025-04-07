@@ -1,42 +1,22 @@
 import java.util.*;
-
 class Solution {
-    static List<String> list = new ArrayList<>();
-    static int end = 0;
-    static String [] s = {"-", "+"};
+    static int answer = 0;
+    static int l;
     public int solution(int[] numbers, int target) {
-        end = numbers.length;
-        perm("", 0);
-        int answer = 0;
-        StringTokenizer st;
-    
-        System.out.println(list.size());
-
-        for(int i=0; i<list.size(); i++){
-            int idx = 0;
-            int tmp = 0;
-            String ss = list.get(i);            
-            for(int k=0; k<ss.length(); k++){
-                char ns = ss.charAt(k);
-                if(ns == '+'){
-                    tmp += numbers[idx++];
-                }else if(ns == '-'){
-                    tmp -= numbers[idx++];
-                }
-            }
-            
-            if(tmp == target) answer++;
-        }
+        l = numbers.length;
+        BFS(0, numbers, target, 0);
         return answer;
     }
     
-    static void perm(String now, int depth){
-        if(depth == end){
-            list.add(now); return;
-        }else{
-            for(int i=0; i<2; i++){
-                perm(now+s[i], depth+1);
-            }
+    // BFS
+    public void BFS(int sum, int[] numbers, int target, int idx){        
+        if(idx == l){ // 길이가 맞으면
+            if(sum == target) answer++;
+            return;
         }
+
+        BFS(sum - numbers[idx], numbers, target, idx+1);
+        BFS(sum + numbers[idx], numbers, target, idx+1);
     }
+    
 }
