@@ -2,33 +2,20 @@ import java.util.*;
 
 class Solution {
     public String solution(int[] numbers) {
-        String answer = "";
-        PriorityQueue<Num> pq = new PriorityQueue<>();   
-        for(int i=0; i<numbers.length; i++){
-            pq.add(new Num(numbers[i]+""));
+        String[] nums = new String[numbers.length];
+        for (int i = 0; i < numbers.length; i++) {
+            nums[i] = String.valueOf(numbers[i]);
         }
-        
-        for(int i=0; i<numbers.length; i++){
-            String s = pq.poll().num;
-            if(i==0 && s.equals("0")) return "0";
-            answer+=s;
-        }
-        return answer;
-    }
-    
-}
 
-class Num implements Comparable<Num>{
-    String num;
-    public Num(String n){
-        this.num = n;
-    }
-    
-    public int compareTo(Num n){
-        String front = this.num + n.num;
-        String end = n.num + this.num;
-        if(Long.parseLong(front) > Long.parseLong(end)) return -1;
-        return 1;
+        // 핵심: 두 숫자를 이어붙인 문자열을 비교해 정렬
+        Arrays.sort(nums, (a, b) -> (b + a).compareTo(a + b));
 
+        // 예외 처리: 가장 큰 수가 0이면 전체가 0
+        if (nums[0].equals("0")) return "0";
+
+        StringBuilder sb = new StringBuilder();
+        for (String num : nums) sb.append(num);
+
+        return sb.toString();
     }
 }
