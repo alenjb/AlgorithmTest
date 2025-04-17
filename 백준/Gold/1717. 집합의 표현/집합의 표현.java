@@ -1,53 +1,48 @@
-
+import java.util.*;
 import java.io.*;
-import java.util.StringTokenizer;
 
 public class Main {
-    static int [] arr;
-    public static void main(String[] args) throws IOException {
+    static int [] parent;
+    public static void main(String [] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         StringTokenizer st = new StringTokenizer(br.readLine());
-
+        StringBuilder sb = new StringBuilder();
         int n = Integer.parseInt(st.nextToken());
         int m = Integer.parseInt(st.nextToken());
-        arr = new int [n+1];
-
-        for(int i=1; i<=n; i++){
-            arr[i] = i;
+        parent = new int[n+1];
+        for(int i=0; i<=n; i++){
+            parent[i] = i;
         }
+
         for(int i=0; i<m; i++){
             st = new StringTokenizer(br.readLine());
+            int cal = Integer.parseInt(st.nextToken());
             int a = Integer.parseInt(st.nextToken());
             int b = Integer.parseInt(st.nextToken());
-            int c = Integer.parseInt(st.nextToken());
-            boolean result = true;
 
-            if(a == 0){
-                union(b,c);
-            }else if(a == 1){
-                if(checkSame(b, c)) bw.write("YES\n");
-                else bw.write("NO\n");
+            if(cal == 0){ // 합집합
+                union(a, b);
+            } else if (cal == 1) { // 조회
+                int aa = find(a);
+                int bb = find(b);
+                if (aa == bb) sb.append("YES").append("\n");
+                else sb.append("NO").append("\n");
             }
-
         }
-        bw.flush();
+
+        System.out.println(sb.toString());
     }
 
-    private static void union(int b, int c) {
-        int bb = find(b);
-        int cc = find(c);
-
-        if(bb != cc) arr[bb] = cc;
-    }
-    private static int find(int a) {
-        if(arr[a] == a) return a;
-        return arr[a] = find(arr[a]);
-    }
-    private static boolean checkSame(int a, int b){
-        a= find(a);
-        b = find(b);
-        return a==b;
+    public static void union(int a, int b){
+        int aa = find(parent[a]);
+        int bb = find(parent[b]);
+        if(aa != bb){
+            parent[aa] = bb;
+        }
     }
 
+    public static int find(int num){
+        if(num == parent[num]) return num;
+        return parent[num] = find(parent[num]);
+    }
 }
