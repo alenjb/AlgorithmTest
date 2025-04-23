@@ -1,67 +1,52 @@
+import java.util.*;
 import java.io.*;
-import java.util.StringTokenizer;
 
 public class Main {
-    static int [] arr;
-    static int [] plan;
-    public static void main(String[] args) throws IOException {
-        BufferedReader br =  new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        StringTokenizer st;
+    static int [] parent;
+    public static void main(String [] args) throws Exception{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
         StringBuilder sb = new StringBuilder();
 
+        int n = Integer.parseInt(st.nextToken()); // 총 도시 수
+        parent = new int[n+1];
+
         st = new StringTokenizer(br.readLine());
-        int N = Integer.parseInt(st.nextToken());
-        st = new StringTokenizer(br.readLine());
-        int M = Integer.parseInt(st.nextToken());
-        arr = new int[N+1];
-        plan = new int[M+1];
-        // 배열 초기화
-        for(int i=0; i<N+1; i++){
-            arr[i] = i;
-        }
-        // 연결 정보 입력
-        for(int i=1; i<N+1; i++){
+        int m = Integer.parseInt(st.nextToken()); // 여행 계획 도시 수
+
+        for(int i=0; i<n+1; i++) parent[i] = i;
+
+        for(int i=1; i<n+1; i++){
             st = new StringTokenizer(br.readLine());
-            for(int j=1; j<N+1; j++){
-                int num = Integer.parseInt(st.nextToken());
-                if(num == 1) {
-                    union(i, j);
-                }
+            for(int j=1; j<n+1; j++){
+                int a = Integer.parseInt(st.nextToken());
+                if(a == 1 && i!=j) union(i, j);
             }
         }
 
-        // 여행 계획 입력
         st = new StringTokenizer(br.readLine());
-        for(int i=1; i<M+1; i++){
-            plan[i] = Integer.parseInt(st.nextToken());
-        }
-
-        // 여행 계획 검사
-        for(int i=1; i<M; i++){
-            if(find(plan[i]) != find(plan[i+1])){
-                bw.write("NO");
-                bw.flush();
-                bw.close();
+        int prev = Integer.parseInt(st.nextToken());
+        for(int i=1; i<m; i++){
+            int now = Integer.parseInt(st.nextToken());
+            if(find(prev) != find(now)) {
+                System.out.println("NO");
                 return;
             }
+            prev = now;
         }
-        bw.write("YES");
-        bw.flush();
-        bw.close();
+        System.out.println("YES");
 
     }
-    static void union(int a, int b){
-        int g1 = find(a);
-        int g2 = find(b);
-        //작은게 대표
-        if(g1 > g2) arr[g1] = g2;
-        else if(g2 > g1) arr[g2] = g1;
-    }
-    static int find(int num){
-        if(arr[num]!= num){
-            arr[num] = find(arr[num]);
+    public static void union(int a, int b){
+        int aa = find(a);
+        int bb = find(b);
+        if(aa != bb){
+            parent[aa] = bb;
         }
-        return arr[num];
+    }
+
+    public static int find(int num){
+        if(parent[num] != num) return parent[num] = find(parent[num]);
+        return num;
     }
 }
