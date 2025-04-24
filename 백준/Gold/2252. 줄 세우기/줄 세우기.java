@@ -1,45 +1,40 @@
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.*;
 
 public class Main {
-	static int N, M;
-	static int[] indegree;
-	static List<Integer>[] arr;
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
-		StringBuilder sb = new StringBuilder();
-		N = sc.nextInt();
-		M = sc.nextInt();
-		indegree= new int [N+1];
-		arr = new List[N+1];
-		for(int i=1; i<=N; i++) arr[i] = new ArrayList<Integer>();
-		
-		
-		for(int i=0; i<M; i++) {
-			int a = sc.nextInt();
-			int b = sc.nextInt();
-			arr[a].add(b);
-			indegree[b]++;
-		}
-		
-		Queue<Integer> q = new ArrayDeque<Integer>();
-		for(int i=1; i<=N; i++) {
-			if(indegree[i] == 0) q.add(i);
-		}
-		
-		while(!q.isEmpty()) {
-			int now = q.poll();
-			sb.append(now).append(" ");
-			for(int n: arr[now]) {
-				indegree[n] --;
-				if(indegree[n] == 0) q.add(n);
-			}
-		}
-		
-		System.out.println(sb);
-	}
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
 
+        st = new StringTokenizer(br.readLine());
+        int N = Integer.parseInt(st.nextToken()); // 사람 수 ( 1~N)
+        int M = Integer.parseInt(st.nextToken()); // 비교회수
+
+        List<Integer> [] arr = new List[N+1];
+        for(int i=1; i<=N; i++) arr[i] = new ArrayList<>();
+        int [] inDegree = new int[N+1];
+
+        for(int i=0; i<M; i++){
+            st = new StringTokenizer(br.readLine());
+            int a = Integer.parseInt(st.nextToken()); // 큰사람
+            int b = Integer.parseInt(st.nextToken()); // 작은사람
+            arr[a].add(b);
+            inDegree[b]++;
+        }
+
+        Queue<Integer> pq = new ArrayDeque<>();
+        for(int i=1; i<=N; i++){
+            if(inDegree[i] == 0) pq.add(i);
+        }
+
+        while (!pq.isEmpty()){
+            int num = pq.poll();
+            for(int nn : arr[num]){
+                inDegree[nn]--;
+                if(inDegree[nn] == 0) pq.add(nn);
+            }
+            System.out.print(num + " ");
+        }
+    }
 }
