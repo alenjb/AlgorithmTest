@@ -1,88 +1,63 @@
-import java.util.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 public class Main {
-	static int count = 0;
-	static int count2 = 0;
-	static char [][] arr;
-	static char [][] arr2;
-	static boolean [][] visited;
-	static boolean [][] visited2;
-	static int num;
-	public static void main(String[] args) throws Exception{
+	static int[] dx = { 0, 1, 0, -1 };
+	static int[] dy = { 1, 0, -1, 0 };
+	static int n;
+	static boolean[][] visited;
+	static char[][] ch;
+	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-		StringTokenizer st = new StringTokenizer(br.readLine());
+
+		n = Integer.parseInt(br.readLine());
+
+		ch = new char[n][n];
 		
-		num = Integer.parseInt(st.nextToken());
-		arr = new char [num][num];
-		visited = new boolean [num][num];
-		arr2 = new char [num][num];
-		visited2 = new boolean [num][num];
-		
-		for(int i=0; i<num; i++) {
-			String line = br.readLine();
-			for(int j=0; j<num; j++) {
-				char a = line.charAt(j);
-				arr[i][j] = a;
-				arr2[i][j] = a;
-			}
+		for (int i = 0; i < n; i++) {
+			ch[i] = br.readLine().toCharArray();
 		}
-		for(int i=0; i<num; i++) {
-			for(int j=0; j<num; j++) {
-				if(!visited[i][j]) {
-					dfs(j, i);
-					count++;
+
+		visited = new boolean[n][n];
+		int answer1 = 0;
+		for(int x = 0; x < n; x++) {
+			for(int y = 0; y < n; y++) {
+				if(!visited[x][y]) {
+					dfs(x, y, ch[x][y]);
+					answer1++;
 				}
-				if(!visited2[i][j]) {
-					dfs2(j, i);
-					count2++;
-				}
-			}
-		}
-		bw.write(count2+" ");
-		bw.write(count+"\n");
-		bw.flush();
-	}
-	// 색약
-	static void dfs(int x, int y) {
-		int [] dx = {-1, 0, 0, 1};
-		int [] dy = {0, -1, 1, 0};
-		char color = arr[y][x];
-		visited[y][x] = true;
-		for(int i=0; i<4; i++) {
-			int nowX = x + dx[i];
-			int nowY = y + dy[i];
-			if(nowX >=0 && nowX < num && nowY >=0 && nowY < num && !visited[nowY][nowX]) {
-				if((color == 'R' || color == 'G') && 
-						(arr[nowY][nowX] == 'R' || arr[nowY][nowX] == 'G')) { 
-					dfs(nowX, nowY);
-				} else if(color == 'B' && arr[nowY][nowX] == 'B') {
-					dfs(nowX, nowY);
+				if(ch[x][y] == 'G') {
+					ch[x][y] = 'R';
 				}
 			}
 		}
 		
-	}
-	// 정상
-	static void dfs2(int x, int y) {
-		int [] dx = {-1, 0, 0, 1};
-		int [] dy = {0, -1, 1, 0};
-		char color = arr2[y][x];
-		visited2[y][x] = true;
-		for(int i=0; i<4; i++) {
-			int nowX = x + dx[i];
-			int nowY = y + dy[i];
-			if(nowX >=0 && nowX < num && nowY >=0 && nowY < num && !visited2[nowY][nowX]) {
-				if(color == 'R' && arr2[nowY][nowX] == 'R') {
-					dfs2(nowX, nowY);
-				} else if(color == 'G' && arr2[nowY][nowX] == 'G') {
-					dfs2(nowX, nowY);
-				} else if(color == 'B' && arr2[nowY][nowX] == 'B') {
-					dfs2(nowX, nowY);
+		visited = new boolean[n][n];
+		int answer2 = 0;
+		for(int x = 0; x < n; x++) {
+			for(int y = 0; y < n; y++) {
+				if(!visited[x][y]) {
+					dfs(x, y, ch[x][y]);
+					answer2++;
 				}
 			}
 		}
-		
+		System.out.print(answer1 + " " + answer2);
 	}
 
+	public static void dfs(int x, int y, char target) {
+		if(visited[x][y]) {
+			return;
+		}
+		
+		visited[x][y] = true;
+		
+		for(int i = 0; i < 4; i++) {
+			int curx = x + dx[i], cury = y + dy[i];
+			if(curx >= 0 && curx < n && cury >= 0 && cury < n && ch[curx][cury] == target) {
+				dfs(curx, cury, target);
+			}
+		}
+	}
 }
