@@ -1,52 +1,81 @@
-import java.util.*;
-import java.io.*;
-
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.StringTokenizer;
+ 
 public class Main {
-    static int [] parent;
-    public static void main(String [] args) throws Exception{
+    static int[] parent;
+ 
+    public static void main(String[] args) throws NumberFormatException, IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        StringBuilder sb = new StringBuilder();
-
-        int n = Integer.parseInt(st.nextToken()); // 총 도시 수
-        parent = new int[n+1];
-
-        st = new StringTokenizer(br.readLine());
-        int m = Integer.parseInt(st.nextToken()); // 여행 계획 도시 수
-
-        for(int i=0; i<n+1; i++) parent[i] = i;
-
-        for(int i=1; i<n+1; i++){
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringTokenizer st;
+ 
+        int N = Integer.parseInt(br.readLine());
+        int M = Integer.parseInt(br.readLine());
+ 
+        parent = new int[N + 1];
+        for (int i = 1; i <= N; i++) {
+            parent[i] = i;
+        }
+ 
+        for (int i = 1; i <= N; i++) {
             st = new StringTokenizer(br.readLine());
-            for(int j=1; j<n+1; j++){
-                int a = Integer.parseInt(st.nextToken());
-                if(a == 1 && i!=j) union(i, j);
+            for (int j = 1; j <= N; j++) {
+                int temp = Integer.parseInt(st.nextToken());
+ 
+                // 연결된 부분은 합집합 연산함.
+                if (temp == 1) {
+                    union(i, j);
+                }
             }
         }
-
+ 
         st = new StringTokenizer(br.readLine());
-        int prev = Integer.parseInt(st.nextToken());
-        for(int i=1; i<m; i++){
+        int start = find(Integer.parseInt(st.nextToken()));
+        for (int i = 1; i < M; i++) {
             int now = Integer.parseInt(st.nextToken());
-            if(find(prev) != find(now)) {
-                System.out.println("NO");
+ 
+            // 맨 처음 출발 도시와 연결되어있지 않은 도시가 있으면
+            // 여행 계획이 불가능한 것임.
+            if (start != find(now)) {
+                bw.write("NO\n");
+                bw.flush();
+                bw.close();
+                br.close();
                 return;
             }
-            prev = now;
         }
-        System.out.println("YES");
-
+ 
+        bw.write("YES\n");
+        bw.flush();
+        bw.close();
+        br.close();
     }
-    public static void union(int a, int b){
-        int aa = find(a);
-        int bb = find(b);
-        if(aa != bb){
-            parent[aa] = bb;
+ 
+    // x의 부모를 찾는 연산
+    public static int find(int x) {
+        if (x == parent[x]) {
+            return x;
+        }
+ 
+        return parent[x] = find(parent[x]);
+    }
+ 
+    // y의 부모를 x의 부모로 치환하는 연산 (x > y 일 경우, 반대)
+    public static void union(int x, int y) {
+        x = find(x);
+        y = find(y);
+ 
+        if (x != y) {
+            if (x < y) {
+                parent[y] = x;
+            } else {
+                parent[x] = y;
+            }
         }
     }
-
-    public static int find(int num){
-        if(parent[num] != num) return parent[num] = find(parent[num]);
-        return num;
-    }
+ 
 }
