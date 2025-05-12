@@ -1,83 +1,86 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.List;
+import java.util.StringTokenizer;
 
-public class  Main {
-	static int [] truePersons; // 진실을 아는 사람들 배열
-	static int [] parent; // 대표번호 배열
-	static ArrayList<Integer> [] party;
-	static int result = 0;
-	public static void main(String[] args) throws Exception{
-		Scanner sc = new Scanner(System.in);
+public class Main {
+
+	static int[] parents;
+	static List<Integer> eList;
+	public static void main(String[] args) throws IOException{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int n = Integer.parseInt(st.nextToken());
+		int m = Integer.parseInt(st.nextToken());
 		
-		int n = sc.nextInt(); // 사람 수
-		int m = sc.nextInt(); // 파티 수
-		party = new ArrayList [m];
-		
-		int knowNum = sc.nextInt(); // 진실을 아는 사람 수
-		truePersons = new int[knowNum];
-		// 진실을 아는 사람 배열 저장
-		for(int i=0; i<knowNum; i++) {
-			truePersons[i] = sc.nextInt();
+		parents = new int[n+1];
+		for(int i=1; i<n+1; i++) {
+			parents[i] = i;
 		}
-		
-		// 파티 배열 저장
-		for(int i=0; i<m; i++) {
-			party[i] = new ArrayList<>();
-			int partySize = sc.nextInt();
-			for(int j=0; j<partySize; j++) {
-				party[i].add(sc.nextInt());
+		st = new StringTokenizer(br.readLine());
+		int en= Integer.parseInt(st.nextToken());
+		eList = new ArrayList<>();
+		if(en==0) {
+			System.out.println(m);
+			return;
+		}
+		else{
+			for(int i=0; i<en; i++) {
+				eList.add(Integer.parseInt(st.nextToken()));
 			}
 		}
 		
-		// 대표번호 배열 초기화
-		parent = new int[n+1];
-		for(int i=0; i<=n; i++) {
-			parent[i] = i;
+		List<Integer>[] partyList = new ArrayList[m];
+		for(int i=0; i<m; i++) {
+			partyList[i] = new ArrayList<>();
 		}
 		
-		// 각 파티에 참여한 사람들을 하나의 그룹으로 만들기
 		for(int i=0; i<m; i++) {
-			int firstPeople = party[i].get(0);
-			for(int j=1; j<party[i].size(); j++) {
-				union(firstPeople, party[i].get(j));
+			st = new StringTokenizer(br.readLine());
+			int pn = Integer.parseInt(st.nextToken());
+			
+			int x = Integer.parseInt(st.nextToken());
+			partyList[i].add(x);
+			for(int j=1; j<pn; j++) {
+				int y = Integer.parseInt(st.nextToken());
+				union(x,y);
+				partyList[i].add(y);
 			}
 		}
+        
+		int cnt=0;
+		for(int i=0; i<m; i++) {
+			boolean flag = true;
+			for(int num : partyList[i]) {
+				if(eList.contains(find(parents[num]))) {
+                    flag= false;
+                    break;
+    			}
+            }
+			if(flag) {
+				cnt++;
+			}
+		}
+		System.out.println(cnt);
 		
-		//각 파티마다 과장할 수 있는지 계산
-		for(int i=0; i<m; i++) {
-			boolean isPossible = true;
-			int cur = party[i].get(0);
-			for(int j=0; j<truePersons.length; j++) {
-				if(find(cur) == find(truePersons[j])) {
-					isPossible = false;
-					break;
-				}
-			}
-			if(isPossible) result++;
-		}
-		System.out.println(result);
-	}
-	static int find(int num) {
-		if(parent[num] == num) return num;
-		else {
-			return parent[num] = find(parent[num]);
-		}
 	}
 	
-	static void union(int a, int b) {
-		a = find(a);
-		b = find(b);
-		
-		if(a != b) {
-			parent[b] = a;
-		}
+	static int find(int x) {
+		if(parents[x] ==x ) return x;
+		return find(parents[x]);
 	}
-	static boolean checkSame(int a, int b) {
-		a = find(a);
-		b = find(b);
-		if(a == b) {
-			return true;
+	
+	static void union(int x, int y) {
+		int rx = find(x);
+		int ry = find(y);
+		if(eList.contains(ry)) {
+			int tmp = rx;
+			rx = ry;
+			ry =tmp;
 		}
-	return false;
+		
+		parents[ry] = rx;
 	}
 }
