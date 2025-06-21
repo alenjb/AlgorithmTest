@@ -1,82 +1,66 @@
 import java.util.*;
 
 class Solution {
+    static Map<String, Integer> map = new HashMap<>();    
+    static Map<String, Integer> count = new HashMap<>();    
     public int[] solution(String[] genres, int[] plays) {
-        Map<String, Integer> map = new HashMap<>();
-        List<Integer> list = new ArrayList<>();
-        
+        Song[] answer = new Song[genres.length];
         for(int i=0; i<genres.length; i++){
-            String g = genres[i];
-            if(map.get(g) == null) map.put(g, plays[i]);
-            else {
-                int tmp = map.get(g);
-                tmp += plays[i];
-                map.put(g, tmp);
+            String genre = genres[i];
+            int play = plays[i];
+            int id = i;
+            map.put(genre, map.getOrDefault(genre, 0) + play);
+            count.put(genre, map.getOrDefault(genre, 0) + 1);
+            answer[i] = new Song(genre, play, id);
+        }
+        Arrays.sort(answer);
+        // 장르가 2개 미만이면 제거
+        for(String key : count.keySet()){
+            if(count.get(key) <2) count.remove(key);
+            else map.put(key, 0);
+        }
+        List<Integer> list = new ArrayList<>();
+        for(int i=0; i<answer.length; i++){
+            Song now = answer[i];
+            if(map.getOrDefault(now.genre, 2) <2){
+                list.add(answer[i].id);
+                map.put(now.genre, map.get(now.genre)+1);
             }
         }
-        
-        //장르 pq 만들기
-        PriorityQueue<Genre> mpq = new PriorityQueue<>();
-
-        for(String g: map.keySet()){
-            mpq.add (new Genre(g, map.get(g)));
+        int [] result = new int [list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            result[i] = list.get(i);
         }
-        
-        //장르 pq에서 꺼내서 각 pq들 만들기
-        while(!mpq.isEmpty()){
-            String genre = mpq.poll().genre;
-            PriorityQueue<Song> pq = new PriorityQueue<>();
-            for(int i=0; i<genres.length; i++){
-                if(genres[i].equals(genre)){
-                    Song s = new Song(i, plays[i]);
-                    pq.add(s);
-                }
-            }
-            int cnt = 0;
-            while(!pq.isEmpty() && cnt<2){
-                list.add(pq.poll().num);
-                cnt++;
-            }
-        }
-        
-        int [] answer = new int[list.size()];
-        int idx = 0;
-
-        for(int ii : list){
-            answer[idx++] = ii;    
-        }
-        return answer;
+        return result;
     }
     
-}
-    class Genre implements Comparable<Genre>{
+    static class Song implements Comparable<Song>{
         String genre;
-        int num;
-        
-        Genre(String genre, int num){
-            this.num = num;
-            this.genre = genre;
-        }
-        
-        @Override
-        public int compareTo(Genre g){
-            return g.num - this.num;
-        }
-    }
+        int plays;
+        int id;
 
-    
-    class Song implements Comparable<Song>{
-        int num;
-        int play;
-        
-        Song(int n, int p){
-            this.num = n;
-            this.play = p;
+        public Song(String g, int p, int i){
+            this.genre = g;
+            this.plays = p;
+            this.id = i;
         }
-        
+
         @Override
         public int compareTo(Song s){
-            if(this.play!= s.play) return s.play - this.play;
-            else return this.num - s.num;
+            // 장르
+            int nowG = map.get(this.genre);
+            int compG = map.get(s.genre);
+            if(nowG > compG) return -1;
+            else if(nowG < compG) return 1;
+
+            // 재생 횟수
+            if(this.plays > s.plays) return -1;
+            else if(this.plays < s.plays) return 1;
+
+            // 고유번호
+            if(this.id < s.id) return -1;
+            else return 1;
         }
     }
+}
+
