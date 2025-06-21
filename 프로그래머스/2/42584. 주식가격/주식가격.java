@@ -1,27 +1,31 @@
 import java.util.*;
 class Solution {
     public int[] solution(int[] prices) {
-        int n = prices.length;
-        int [] answer = new int[n];
         Stack<Integer> stack = new Stack<>();
-        stack.push(0);
-        
-        for(int i=1; i<n; i++){
+        stack.push(0); //인덱스 넣기
+        int l = prices.length;
+        int [] answer = new int[l];
+
+        for(int i=1; i<l; i++){
             int now = prices[i];
-            if(!stack.isEmpty() && prices[stack.peek()] > now){
-                while(!stack.isEmpty() && prices[stack.peek()] > now){
-                    // 빼기
-                    answer[stack.peek()] = i - stack.peek();
-                    stack.pop();
-                }
+            if(stack.isEmpty()) stack.push(i);
+            else{
+                int peek = prices[stack.peek()];
+                if(peek <= now) stack.push(i);
+                else {
+                    while(!stack.isEmpty() && prices[stack.peek()] > now){
+                        int push_idx = stack.pop();
+                        answer[push_idx] = i - push_idx;
+                    }
+                    stack.push(i);
+                }                
             }
-            stack.push(i);
         }
-        if(!stack.isEmpty()){
-            while(!stack.isEmpty()){
-                int now = stack.pop();
-                answer[now] = n-1 - now;                
-            }
+        
+        while(!stack.isEmpty()){
+            int push_idx =stack.pop();
+            answer[push_idx] = l - push_idx -1;
+
         }
         return answer;
     }
