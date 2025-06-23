@@ -1,17 +1,22 @@
 import java.util.*;
+
 class Solution {
     public int solution(int[] people, int limit) {
-        int answer = 0;
         Arrays.sort(people);
-        
-        int idx=0;
-        for(int i=people.length-1;i>=idx;i--){
-            if(people[i]+people[idx]<=limit){
-                answer++;
-                idx++;
+        int i = 0;
+        int j = people.length - 1;
+        int answer = 0;
+
+        while (i <= j) {
+            if (people[i] + people[j] <= limit) {
+                // 가벼운 사람과 무거운 사람을 함께 태움
+                i++;
             }
-            else answer++;
+            // 무거운 사람은 무조건 보냄
+            j--;
+            answer++;
         }
+
         return answer;
     }
 }
