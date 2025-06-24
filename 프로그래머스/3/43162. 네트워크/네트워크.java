@@ -1,33 +1,40 @@
 import java.util.*;
 class Solution {
-    static boolean [] visited;
-    static List<Integer> [] arr;
-    public int solution(int n, int[][] com) {
-        arr = new List[n+1];
-        visited = new boolean[n+1];
-        for(int i=0; i<n; i++) arr[i] = new ArrayList<Integer>();
+    static int [] parent;
+    public int solution(int n, int[][] computers) {
+        // 부모 초기화
+        parent = new int [n];
+        for(int i=0; i<n; i++) parent[i] = i;
         
-        for(int i=0; i<n; i++){
-            for(int j=0; j<n; j++){
-                if(i!=j && com[i][j] == 1){
-                    arr[i].add(j);
+        int r = computers.length;
+        int c = computers[0].length;
+        
+        // 입력값으로 유니온
+        for(int i=0; i<r; i++){
+            for(int j=0; j<c; j++){
+                if(i!=j && computers[i][j] == 1){
+                    union(i, j);
                 }
             }
         }
         
-        int answer = 0;
-        for(int i=0; i<n; i++){
-            if(!visited[i]) {
-                DFS(i);
-                answer++;
-            }
-        }
-        return answer;
+        //parent의 값들 셋에 넣기
+        Set<Integer> set = new HashSet<>();
+        for(int num : parent) set.add(find(num));
+        return set.size();
+        
+        
     }
-    public void DFS(int num){
-        visited[num] = true;
-        for(int con : arr[num]){
-            if(!visited[con]) DFS(con);
-        }
+    
+    public void union(int a, int b){
+        int aa = find(a);
+        int bb = find(b);
+        if(aa!= bb) parent[aa] = bb;
+    }
+    
+    public int find(int a){
+        int p = parent[a];
+        if(p == a) return a;
+        return parent[a] = find(p);
     }
 }
