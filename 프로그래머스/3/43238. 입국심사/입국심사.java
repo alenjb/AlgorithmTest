@@ -1,22 +1,32 @@
 import java.util.*;
 class Solution {
-    public long solution(int n, int[] times) {
-        long left = 0;
-        long right = (long) Arrays.stream(times).max().getAsInt() * n; // 수정된 부분
+    static int [] times;
+    static int N;
+    static int p;
+    public long solution(int n, int[] ti) {
+        times = ti;
+        N = n;
+        p = ti.length;
         
-        while(left + 1 < right){
+        long min = -1;
+        for(int i=0; i<p; i++){
+            min = Math.max(min, ti[i]);
+        }
+        long left = 0;
+        long right = n * min;
+        while(left+1 < right){
             long mid = (left + right) / 2;
-            if(isValid(mid, times, n)) right = mid;
+            if(possible(mid)) right = mid;
             else left = mid;
         }
+        
         return right;
     }
-
-    public boolean isValid(long time, int[] times, int n){
-        long avail = 0;
-        for(int t : times){
-            avail += time / t;
+    public boolean possible(long time){
+        long num = 0;
+        for(int i=0; i<p; i++){
+            num += time/ times[i];
         }
-        return avail >= n;
-    }
+        return num >= N;
+    }    
 }
