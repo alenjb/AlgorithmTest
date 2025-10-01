@@ -1,27 +1,19 @@
 import java.util.*;
 class Solution {
     public String solution(int[] numbers) {
-        // 앞자리 체크
-        PriorityQueue<String> pq = new PriorityQueue<>(
-            new Comparator<String>(){
+        List<String> ss = new ArrayList<>();
+        for(int n : numbers) ss.add(n + "");
+        Collections.sort(ss, new Comparator<String>(){
             @Override
             public int compare(String s1, String s2){
-                String r1 = s1 + s2;
-                String r2 = s2 + s1;
-                return r2.compareTo(r1);
+                return (s2 + s1).compareTo(s1 + s2);
             }
         });
+        System.out.print(ss.size());
         StringBuilder sb = new StringBuilder();
-        for(int n : numbers){
-            sb.append(n);
-            pq.add(sb.toString());
-            sb.setLength(0);
-        }
-        while(!pq.isEmpty()){
-            sb.append(pq.poll());
-        }
-        String answer = sb.toString();
-        if(answer.charAt(0) == '0') return "0";
-        return answer;
+        for(String sss : ss) sb.append(sss);
+        String result = sb.toString();
+        if(result.charAt(0) == '0') return "0";
+        return sb.toString();
     }
 }
