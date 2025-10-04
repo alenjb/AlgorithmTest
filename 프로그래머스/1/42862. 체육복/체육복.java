@@ -1,44 +1,30 @@
 import java.util.*;
-
 class Solution {
     public int solution(int n, int[] lost, int[] reserve) {
-        List<Integer> lostList = new ArrayList<>();
-        List<Integer> reserveList = new ArrayList<>();
-
-        // 교집합 제거
+        // reserve에서 lost랑 겹치는거 제거
         Arrays.sort(lost);
         Arrays.sort(reserve);
-        for (int l : lost) {
-            boolean found = false;
-            for (int i = 0; i < reserve.length; i++) {
-                if (l == reserve[i]) {
-                    reserve[i] = -1;
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) lostList.add(l);
-        }
-        for (int r : reserve) {
-            if (r != -1) reserveList.add(r);
-        }
+        List<Integer> realLost = new ArrayList<>(); //진짜 잃어버린 애들
+        for(int num : lost) realLost.add(num);
 
-        // 도난당한 학생 기준
-        for (int i = 0; i < lostList.size(); i++) {
-            int student = lostList.get(i);
-            if (reserveList.contains(student - 1)) {
-                reserveList.remove(Integer.valueOf(student - 1));
-                lostList.set(i, -1); // 빌림 처리
-            } else if (reserveList.contains(student + 1)) {
-                reserveList.remove(Integer.valueOf(student + 1));
-                lostList.set(i, -1); // 빌림 처리
+        List<Integer> avail = new ArrayList<>(); //진짜 빌려줄 수 있는 애들
+        for(int num : reserve){
+            if(!realLost.contains(num)) avail.add(num);
+            else realLost.remove(Integer.valueOf(num));
+        }
+        
+        int answer = n - realLost.size();
+        for(int i=0; i<realLost.size(); i++){
+            int prev = realLost.get(i) - 1;
+            int next = realLost.get(i)+ 1;
+            if(avail.contains(prev)) {
+                answer++;
+                avail.remove(Integer.valueOf(prev));
+            }else if(avail.contains(next)){
+                answer++;
+                avail.remove(Integer.valueOf(next));
             }
         }
-
-        int unable = 0;
-        for (int l : lostList) {
-            if (l != -1) unable++;
-        }
-        return n - unable;
+        return answer;
     }
 }
