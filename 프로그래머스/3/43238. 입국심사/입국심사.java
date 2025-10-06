@@ -1,32 +1,29 @@
 import java.util.*;
 class Solution {
-    static int [] times;
-    static int N;
-    static int p;
-    public long solution(int n, int[] ti) {
-        times = ti;
-        N = n;
-        p = ti.length;
-        
-        long min = -1;
-        for(int i=0; i<p; i++){
-            min = Math.max(min, ti[i]);
-        }
+    public long solution(int n, int[] times) {
+        // 범위이르모 왼쪽 0 오른쪽 n / times의 맥스
+        int maxTime = -1;
+        for(int i=0; i<times.length; i++) maxTime = Math.max(times[i], maxTime);
         long left = 0;
-        long right = n * min;
-        while(left+1 < right){
-            long mid = (left + right) / 2;
-            if(possible(mid)) right = mid;
-            else left = mid;
-        }
+        long right = (long)n * maxTime;
+        long answer = 0;
         
-        return right;
-    }
-    public boolean possible(long time){
-        long num = 0;
-        for(int i=0; i<p; i++){
-            num += time/ times[i];
+        while(left <= right){
+            long mid = (left + right) / 2;
+            if(check(mid, n, times)){
+                answer = mid;
+                right = mid-1;
+            }else left = mid+1;
         }
-        return num >= N;
-    }    
+        return answer;
+    }
+    
+    public boolean check(long time, int n, int[] times){
+        int tl = times.length;
+        long total = 0;
+        for(int i=0; i<tl; i++){
+            total += (time / times[i]);
+        }
+        return total >= n;
+    }
 }
