@@ -1,6 +1,25 @@
--- 코드를 입력하세요
-SELECT o.ANIMAL_ID, o.NAME 
-from ANIMAL_INS i right outer join ANIMAL_OUTS o on i.ANIMAL_ID = o.ANIMAL_ID 
-where i.ANIMAL_ID is null
-order by ANIMAL_ID
-;
+SELECT A.ANIMAL_ID, A.NAME
+FROM ANIMAL_OUTS A
+WHERE A.ANIMAL_ID NOT IN (SELECT B.ANIMAL_ID FROM ANIMAL_INS B)
+ORDER BY A.ANIMAL_ID
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# -- 코드를 입력하세요
+# SELECT o.ANIMAL_ID, o.NAME 
+# from ANIMAL_INS i right outer join ANIMAL_OUTS o on i.ANIMAL_ID = o.ANIMAL_ID 
+# where i.ANIMAL_ID is null
+# order by ANIMAL_ID
+# ;
