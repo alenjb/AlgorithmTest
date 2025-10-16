@@ -1,3 +1,15 @@
--- 코드를 작성해주세요
-SELECT CONCAT(FORMAT(MAX(LENGTH), 2), 'cm') AS MAX_LENGTH
-FROM FISH_INFO
+select CONCAT(FORMAT(MAX(LENGTH),2), 'cm') as 'MAX_LENGTH'
+from FISH_INFO
+
+
+
+
+
+
+
+
+
+
+# -- 코드를 작성해주세요
+# SELECT CONCAT(FORMAT(MAX(LENGTH), 2), 'cm') AS MAX_LENGTH
+# FROM FISH_INFO
