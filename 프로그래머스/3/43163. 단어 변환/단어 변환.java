@@ -2,72 +2,45 @@ import java.util.*;
 
 class Solution {
     public int solution(String begin, String target, String[] words) {
-        int l = words.length;
-        int wl = begin.length();
+        if (!Arrays.asList(words).contains(target)) return 0;
 
-        String[] allWords = new String[l + 1];
-        allWords[0] = begin;
-        for (int i = 0; i < l; i++) allWords[i + 1] = words[i];
-        l++;
-
-        boolean[] visited = new boolean[l];
-        Map<String, Integer> map = new HashMap<>();
-        List<Integer>[] arr = new List[l];
-        for (int i = 0; i < l; i++) {
-            arr[i] = new ArrayList<>();
-            map.put(allWords[i], i);
-        }
-
-        for (int i = 0; i < l; i++) {
-            for (int j = i + 1; j < l; j++) {
-                if (getDiff(allWords[i], allWords[j]) == 1) {
-                    arr[i].add(j);
-                    arr[j].add(i);
-                }
-            }
-        }
-
-        // target이 words에 없으면 변환 불가
-        if (!map.containsKey(target)) return 0;
-
-        // BFS
         Queue<Node> q = new ArrayDeque<>();
-        q.offer(new Node(begin, 0, 0)); // begin은 항상 0번
+        boolean[] visited = new boolean[words.length];
+        q.add(new Node(begin, 0));
 
         while (!q.isEmpty()) {
             Node poll = q.poll();
-            if (visited[poll.num]) continue;
-            visited[poll.num] = true;
+            String now = poll.word;
+            int count = poll.cnt;
 
-            if (poll.s.equals(target)) return poll.cnt;
+            if (now.equals(target)) return count;
 
-            for (int next : arr[poll.num]) {
-                if (!visited[next]) {
-                    q.offer(new Node(allWords[next], poll.cnt + 1, next));
+            for (int i = 0; i < words.length; i++) {
+                if (!visited[i] && canConvert(now, words[i])) {
+                    visited[i] = true;
+                    q.add(new Node(words[i], count + 1));
                 }
             }
         }
-
         return 0;
     }
 
-    static int getDiff(String a, String b) {
-        int cnt = 0;
+    static boolean canConvert(String a, String b) {
+        int diff = 0;
         for (int i = 0; i < a.length(); i++) {
-            if (a.charAt(i) != b.charAt(i)) cnt++;
+            if (a.charAt(i) != b.charAt(i)) diff++;
+            if (diff > 1) return false;
         }
-        return cnt;
+        return diff == 1;
     }
 
     static class Node {
-        String s;
+        String word;
         int cnt;
-        int num;
 
-        public Node(String s, int cnt, int num) {
-            this.s = s;
+        Node(String word, int cnt) {
+            this.word = word;
             this.cnt = cnt;
-            this.num = num;
         }
     }
 }
