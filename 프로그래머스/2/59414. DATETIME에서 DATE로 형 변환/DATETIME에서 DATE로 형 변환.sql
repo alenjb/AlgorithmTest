@@ -1,4 +1,4 @@
-SELECT ANIMAL_ID, NAME, DATE_FORMAT(DATETIME, "%Y-%m-%d")
+SELECT ANIMAL_ID, NAME , DATE_FORMAT(DATETIME, '%Y-%m-%d') AS '날짜'
 FROM ANIMAL_INS
 ORDER BY ANIMAL_ID
 
@@ -16,6 +16,9 @@ ORDER BY ANIMAL_ID
 
 
 
+# SELECT ANIMAL_ID, NAME, DATE(DATETIME) as '날짜'
+# FROM ANIMAL_INS
+# ORDER BY ANIMAL_ID
 
 
 
@@ -25,6 +28,21 @@ ORDER BY ANIMAL_ID
 
 
 
-# -- 코드를 입력하세요
-# SELECT ANIMAL_ID, NAME , DATE_FORMAT(DATETIME, "%y-%M-%D") as 날짜
-# from ANIMAL_INS
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# # -- 코드를 입력하세요
+# # SELECT ANIMAL_ID, NAME , DATE_FORMAT(DATETIME, "%y-%M-%D") as 날짜
+# # from ANIMAL_INS
