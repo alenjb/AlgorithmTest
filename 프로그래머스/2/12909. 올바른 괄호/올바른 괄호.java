@@ -1,18 +1,19 @@
 import java.util.*;
 class Solution {
     boolean solution(String s) {
-        Stack<Character> st = new Stack<>();
         boolean answer = true;
-        for(int i=0; i<s.length(); i++){
+        Queue<Character> q = new ArrayDeque<>();
+        int sl = s.length();
+        for(int i=0; i<sl; i++){
             char c = s.charAt(i);
-            if(st.isEmpty() || c == '(') st.push(c);
-            else if(c == ')' && st.peek() == '('){
-                st.pop();
-            }else {
-                answer = false;
-                break;
+            if(c == '(') q.offer(c);
+            else{
+                if(q.isEmpty()) return false;
+                char poll = q.poll();
+                if(poll != '(') return false;
             }
         }
-        return answer && st.isEmpty();
+        if(!q.isEmpty()) return false;
+        return answer;
     }
 }
