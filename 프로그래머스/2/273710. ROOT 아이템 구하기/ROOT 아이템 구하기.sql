@@ -1,8 +1,38 @@
--- 코드를 작성해주세요
-select ITEM_ID, ITEM_NAME
 
-from ITEM_INFO
 
-where ITEM_ID in (select ITEM_ID from ITEM_TREE where PARENT_ITEM_ID is NULL)
 
-order by ITEM_ID
+# item_info와 item_tree 합친 테이블과 item_tree 테이블 비교해서 찾기
+
+# SELECT C.ITEM_ID, C.ITEM_NAME, C.PARENT_ITEM_ID, D.ITEM_ID AS '부모'
+# FROM
+# (SELECT A.ITEM_ID, A.ITEM_NAME, B.PARENT_ITEM_ID
+# from ITEM_INFO A JOIN ITEM_TREE B ON A.ITEM_ID = B.ITEM_ID) C
+# JOIN ITEM_TREE D ON C.PARENT_ITEM_ID = D.ITEM_ID
+
+SELECT A.ITEM_ID, A.ITEM_NAME AS PARENT_ITEM_ID
+from ITEM_INFO A JOIN ITEM_TREE B ON A.ITEM_ID = B.ITEM_ID
+WHERE B.PARENT_ITEM_ID IS NULL
+ORDER BY A.ITEM_ID
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# -- 코드를 작성해주세요
+# select ITEM_ID, ITEM_NAME
+
+# from ITEM_INFO
+
+# where ITEM_ID in (select ITEM_ID from ITEM_TREE where PARENT_ITEM_ID is NULL)
+
+# order by ITEM_ID
