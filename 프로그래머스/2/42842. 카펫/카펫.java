@@ -1,28 +1,19 @@
 class Solution {
     public int[] solution(int brown, int yellow) {
-        int[] answer = new int[2];
- 
-        int carpet = brown + yellow;
- 
-        // yellow가 존재하기 위해서는 가로와 세로의 길이가 3이상이여야 한다.
-        for (int i = 3; i <= carpet; i++) {
-            int col = i; // 세로
-            int row = carpet / col; // 가로
- 
-            // 가로의 갯수가 3 이하라면 다음 인덱스
-            if (row < 3) {
-                continue;
-            }
- 
-            // "가로는 세로의 길이보다 크거나 같다" 조건
-            if (row >= col) {
-                if ((row - 2) * (col - 2) == yellow) {
-                    answer[0] = row;
-                    answer[1] = col;
-                    break;
+        int total = brown + yellow;
+
+        for (int y = 1; y <= total; y++) {
+            if (total % y == 0) {
+                int x = total / y;
+
+                // x >= y 조건 (가로가 더 길게)
+                if (x >= y) {
+                    if ((x - 2) * (y - 2) == yellow) {
+                        return new int[]{x, y};
+                    }
                 }
             }
         }
-        return answer;
+        return new int[]{};
     }
 }
