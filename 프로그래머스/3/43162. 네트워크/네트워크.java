@@ -1,34 +1,34 @@
 import java.util.*;
 class Solution {
-    static int [] parent;
+    int [] parent;
     public int solution(int n, int[][] computers) {
         parent = new int [n];
         for(int i=0; i<n; i++) parent[i] = i;
+        
         for(int i=0; i<n; i++){
             for(int j=0; j<n; j++){
-                if(i!=j && computers[i][j] == 1){
+                if(i == j) continue;
+                if(computers[i][j] == 1){
                     union(i, j);
                 }
             }
         }
+        for(int i=0; i<n; i++) parent[i] = find(parent[i]);
+        Set<Integer> set = new HashSet<>();
+        for(int i=0; i<n; i++) set.add(parent[i]);
         
-        HashSet<Integer> set = new HashSet<>();
-        for(int i=0; i<n; i++){
-            set.add(find(i));
-        }
-        return set.size();
-    }
-    static void union(int a, int b){
-        int aa = find(a);
-        int bb = find(b);
-        
-        if(aa!=bb){
-            parent[aa] = bb;
-        }
+        int answer = set.size();
+        return answer;
     }
     
-    static int find(int num){
-        if(parent[num] == num) return num;
+    public void union(int a, int b){
+        int aa = find(a);
+        int bb = find(b);
+        parent[aa] = bb;
+    }
+    
+    public int find(int num){
+        if(num == parent[num]) return num;
         return parent[num] = find(parent[num]);
     }
 }
