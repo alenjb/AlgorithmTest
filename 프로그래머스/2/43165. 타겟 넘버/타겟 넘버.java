@@ -1,19 +1,27 @@
 import java.util.*;
 class Solution {
-    static public int ans = 0;
+    static int answer = 0;
     public int solution(int[] numbers, int target) {
-        int l = numbers.length;
-        DFS(numbers, target, 0, 0);
-        return ans;
+        plus(0, numbers, target, 0);
+        minus(0, numbers, target, 0);
+        return answer;
     }
-    static void DFS(int [] numbers, int target, int idx, int sum){
-        if(idx == numbers.length){
-            if(sum == target) ans++;
+    public static void plus(int now, int []nums, int target, int idx){
+        now += nums[idx++];
+        if(idx == nums.length) {
+            if(now == target) answer++;
             return;
         }
-        // 덧셈
-        DFS(numbers, target, idx+1, sum + numbers[idx]);
-        // 뺄셈
-        DFS(numbers, target, idx+1, sum - numbers[idx]);
+        plus(now, nums, target, idx);
+        minus(now, nums, target, idx);
+    }
+    public static void minus(int now, int []nums, int target, int idx){
+        now -= nums[idx++];
+        if(idx == nums.length) {
+            if(now == target) answer++;
+            return;
+        }
+        plus(now, nums, target, idx);
+        minus(now, nums, target, idx);
     }
 }
