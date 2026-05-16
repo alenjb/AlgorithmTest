@@ -1,24 +1,27 @@
 import java.util.*;
 class Solution {
     public long solution(int n, int[] times) {
-        // 최소 0 최대 n * maxTime
-        long maxTime = 0;
-        for(int time : times) maxTime = Math.max(maxTime, time);
-        
+        long answer = 0;
         long left = 0;
-        long right = n * maxTime;
-        while(left+1 < right){
+        long right = 0;
+        long maxTime = 0;
+        for(int time : times) maxTime = Math.max(time, maxTime);
+        right = maxTime * n;
+        while(left + 1 < right){
             long mid = (left + right) / 2;
-            if(check(mid, times, n)){
-                right = mid;
-            }else left = mid;
+            // 성공
+            if(pos(mid, times, n)) right = mid;
+            //실패
+            else left = mid;
         }
         return right;
     }
-    
-    static boolean check(long num, int[] times, int n){
-        long answer = 0;
-        for(int time : times) answer += (num / time);
-        return answer >= n;
+    public boolean pos(long num, int[] times, int n){
+        //num 시간
+        // times 심사 시간
+        // n 사람 수
+        long count = 0;
+        for(int time : times) count += num / time;
+        return count >= n;
     }
 }
