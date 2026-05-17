@@ -1,53 +1,46 @@
-import java.util.*; 
+import java.util.*;
 class Solution {
-    static int [] parent;
     public int solution(int n, int[][] wires) {
-        parent = new int [n+1];
-        for(int i=1; i<=n; i++) parent[i] = i;
+        // arr로 만들기
+        List<Integer> [] arr = new List[n+1];
+        for(int i=0; i<n+1; i++) arr[i] = new ArrayList<>();
+        int answer = Integer.MAX_VALUE;
         
         for(int i=0; i<wires.length; i++){
-            union(wires[i][0], wires[i][1]);
+            int a = wires[i][0];
+            int b = wires[i][1];
+            arr[b].add(a);
+            arr[a].add(b);
         }
+        for(int cut=0; cut < wires.length; cut++){
+            // 자르기
+            int cutA = wires[cut][0];
+            int cutB = wires[cut][1];
+            arr[cutA].remove(Integer.valueOf(cutB));
+            arr[cutB].remove(Integer.valueOf(cutA));
         
-        int answer = Integer.MAX_VALUE;
-        for (int i = 0; i < wires.length; i++) {
-    // 1️⃣ parent 새로 초기화
-    for (int j = 1; j <= n; j++) parent[j] = j;
-    
-    // 2️⃣ i번째 간선 제외하고 연결
-    for (int j = 0; j < wires.length; j++) {
-        if (i == j) continue;
-        union(wires[j][0], wires[j][1]);
-    }
-
-    // 3️⃣ 그룹별 노드 개수 계산
-    int[] cnt = new int[n+1];
-    for (int j = 1; j <= n; j++) {
-        cnt[find(j)]++;
-    }
-
-    int max = 0, min = 101;
-    for (int j = 1; j <= n; j++) {
-        if (cnt[j] > 0) {
-            max = Math.max(max, cnt[j]);
-            min = Math.min(min, cnt[j]);
+            // 잘린 두군데서 DFS 돌려서 세기
+            boolean [] visited1 = new boolean[n+1];
+            boolean [] visited2 = new boolean[n+1];
+            visited1[cutA] = true;
+            visited2[cutB] = true;
+            int cntA = dfs(cutA, arr, visited1);
+            int cntB = dfs(cutB, arr, visited2);
+            if(Math.abs(cntA - cntB) < answer) answer = Math.abs(cntA - cntB);
+            arr[cutA].add(cutB);
+            arr[cutB].add(cutA);
         }
-    }
-
-    answer = Math.min(answer, max - min);
-}
-
         return answer;
     }
-    
-    static void union(int a, int b){
-        int aa = find(a);
-        int bb = find(b);
-        parent[aa] = bb;
-    }
-    
-    static int find(int num){
-        if(parent[num] == num) return num;
-        return parent[num] = find(parent[num]);
+    public int dfs(int num, List<Integer>[] arr, boolean[] visited){
+        int count = 1;
+        for(int next : arr[num]){
+            if(!visited[next]){
+                visited[next] = true;
+                count+= dfs(next, arr, visited);
+            }
+        }
+        return count;
+        
     }
 }
